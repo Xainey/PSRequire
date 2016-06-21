@@ -10,22 +10,22 @@ function Sync-Module
     Param
     (
         [Parameter(Mandatory=$true)]
-        [string[]] $Package,
+        [PSCustomObject] $Package,
 
         [Parameter(Mandatory=$false)]
         [string] $Force = $false,
 
         [Parameter(Mandatory=$false)]
-        [string] $Scope = 'All Users'
+        [string] $Scope = 'AllUsers'
     )
 
     foreach ($module in $Package)
     {
+        Write-Verbose "Testing module: '$module'..."
+
         $meta = (test-meta -package $module)
-        $repository = ($meta.Clone())
+        $repository = $meta.Clone()
         $repository.Remove("Repository")
-        
-        $meta
 
         if($meta.RequiredVersion)
         {
@@ -42,13 +42,12 @@ function Sync-Module
         
         if(!(Get-InstalledModule @repository -ErrorAction SilentlyContinue))
         {
-            Write-Verbose "Correct Version not Installed"
-            #Install-Module @module -Repository $meta.Repository -Force $Force
+            Write-Verbose "Correct Version not Installed. Installing."
+            Install-Module @module -Repository $meta.Repository -Force $Force -Scope $Scope
         }
         else
         {
-            Write-Verbose "Module Installed"
+            Write-Verbose "Module already Installed"
         }
-        
     }
 }
