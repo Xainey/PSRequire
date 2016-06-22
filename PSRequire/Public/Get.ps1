@@ -10,7 +10,7 @@ function Get
 
     if (!(Test-Path -Path $Path))
     {
-        Write-Host "Missing require.json. Run Invoke-PoshRequire -Init."
+        Write-Host "Missing require.json. Run Invoke-PSRequire -Init."
         return
     }
 

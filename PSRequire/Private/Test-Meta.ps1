@@ -25,7 +25,8 @@ function Test-Meta
 
     for($i = $versions.Count; $i -lt 3; $i++)
     {
-        $versions.Add("*")
+        #$versions.Add("*")
+        $versions += "*"
     }
 
     $major = $minor = $revis = $null

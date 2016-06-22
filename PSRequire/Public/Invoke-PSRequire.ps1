@@ -1,4 +1,4 @@
-function Invoke-PoshRequire
+function Invoke-PSRequire
 {
     [cmdletbinding(DefaultParameterSetName="Help")]
     param( 
@@ -68,7 +68,7 @@ function Invoke-PoshRequire
             else { Remove -Package $Package -Branch "require-dev" }
         }
         "Help"  { 
-            Write-Host "Help Block"
+            Write-Host "Help Block!!"
         }
         "Install"  { 
             if(!$Dev) { Install }

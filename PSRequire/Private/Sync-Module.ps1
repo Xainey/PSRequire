@@ -43,7 +43,7 @@ function Sync-Module
         if(!(Get-InstalledModule @repository -ErrorAction SilentlyContinue))
         {
             Write-Verbose "Correct Version not Installed. Installing."
-            Install-Module @module -Repository $meta.Repository -Force $Force -Scope $Scope
+            Install-Module @module -Repository $meta.Repository -Force $Force -Scope $Scope -WhatIf
         }
         else
         {

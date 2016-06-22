@@ -1,4 +1,4 @@
-function Require
+function Remove
 {
     [cmdletbinding()]
     param(
@@ -17,23 +17,13 @@ function Require
 
     if (!(Test-Path -Path $Path))
     {
-        Write-Host "Missing require.json. Run Invoke-PoshRequire -Init."
+        Write-Host "Missing require.json. Run Invoke-PSRequire -Init."
         return
     }
 
     foreach($module in $Package)
     {
-        $pieces = $module.split(":")
-
-        if($pieces.Count -ne 2)
-        {
-            Write-Host "Invalid Package Syntax"
-            return
-        }
-
-        #TODO: Verify Package Exists
-
-        $json.$Branch = $json.$Branch | Add-Member @{$pieces[0] = $pieces[1]} -PassThru
+        $json.$Branch.PSObject.Properties.Remove($module)
     }
 
     $json | ConvertTo-Json | Out-File $Path
