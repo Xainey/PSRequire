@@ -2,6 +2,7 @@ This Project is a WIP
 
 # CLI Reference
 
+```
 # Init 
 Invoke-PSRequire -Init
 Invoke-PSRequire -Init -Name "build requirements"
@@ -42,3 +43,4 @@ Invoke-PSRequire -Remove "PSGallery/PSDeploy"
 Invoke-PSRequire -Get
 Invoke-PSRequire -Validate
 Invoke-PSRequire -Install -Verbose
+```
