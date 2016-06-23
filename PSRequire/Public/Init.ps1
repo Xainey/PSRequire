@@ -11,8 +11,7 @@ function Init
     
     if (Test-Path -Path $Path)
     {
-        Write-Host "File require.json already exists."
-        return
+        return "File require.json already exists."
     }
 
     $json = @{ 
@@ -25,6 +24,7 @@ function Init
     }
 
     $folder = Split-Path -Path $Path
+    
     if(!(Test-Path -Path $folder))
     {
         New-Item $folder -Type directory -Force

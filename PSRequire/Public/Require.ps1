@@ -12,29 +12,37 @@ function Require
         [string] $Branch = "require"
     )
     
-    $json = Read-JsonFile -Path $Path
-
     if (!(Test-Path -Path $Path))
     {
         Write-Host "Missing require.json. Run Invoke-PSRequire -Init."
         return
     }
 
-    foreach($module in $Package)
-    {
-        $pieces = $module.split(":")
+    $json = Read-JsonFile -Path $Path
 
-        if($pieces.Count -ne 2)
+    $required = Read-PackageList -Packages $Package
+
+    foreach($require in $required)
+    {
+
+        if(!(Get-PSRepository -Name ($require.Repo) -ErrorAction SilentlyContinue))
         {
-            Write-Host "Invalid Package Syntax"
-            return
+            Write-Host "Repo doesnt exist"
+            continue
         }
 
-        #TODO: Verify Package Exists
+        if(!(Find-Module -Repository $require.Repo -Name $require.Module -ErrorAction SilentlyContinue))
+        {
+            Write-Host "Module doesnt exist"
+            continue
+        }
 
-        #TODO: If add existing package update instead.
+        #TODO: Test if version is avaliable
 
-        $json.$Branch = $json.$Branch | Add-Member @{$pieces[0] = $pieces[1]} -PassThru
+        $key = ("{0}/{1}" -f $require.Repo, $require.Module)
+
+        # Add node to require-* branch. Force to overwrite existing node if specifying the same package.
+        $json.$Branch = $json.$Branch | Add-Member @{$key = $require.Version} -PassThru -Force
     }
 
     $json | ConvertTo-Json | Out-File $Path

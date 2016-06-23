@@ -15,7 +15,9 @@ function Install
         return
     }
 
-    $packagelist = Read-PackageList -Path $Path -Node $Branch
+    $json = Read-JsonFile -Path $Path
+
+    $packagelist = Read-PackageList -Json $json -Node $Branch
     
     Sync-Module -Package $packagelist
 }

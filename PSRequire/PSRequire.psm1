@@ -10,6 +10,7 @@ foreach($import in @($Public + $Private))
 {
     try
     {
+        Write-Host ("Importing file: `{0}` @ {1}" -f $import, (Get-Date -Format T))
         . $import.fullname
     }
     catch
