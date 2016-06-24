@@ -9,7 +9,7 @@ function Require
         [string] $Path = "$(Get-Location)\require.json",
 
         [parameter(Mandatory = $False)]
-        [string] $Branch = "require"
+        [switch] $Dev
     )
     
     if (!(Test-Path -Path $Path))
@@ -18,31 +18,40 @@ function Require
         return
     }
 
-    $json = Read-JsonFile -Path $Path
+    if($Dev)
+    {
+        $Branch = "require-dev"
+    }
+    else
+    {
+        $Branch = "require"
+    }
 
-    $required = Read-PackageList -Packages $Package
+    $json = (Read-JsonFile -Path $Path)
 
-    foreach($require in $required)
+    $required = (Read-PackageList -Packages $Package)
+
+    foreach($item in $required)
     {
 
-        if(!(Get-PSRepository -Name ($require.Repository) -ErrorAction SilentlyContinue))
+        if(!(Get-PSRepository -Name ($item.Repository) -ErrorAction SilentlyContinue))
         {
-            Write-Host ("Repo '{0}' doesnt exist" -f $require.Repository)
+            Write-Host ("Repo '{0}' doesnt exist" -f $item.Repository)
             continue
         }
 
-        if(!(Find-Module -Repository $require.Repository -Name $require.Module -ErrorAction SilentlyContinue))
+        if(!(Find-Module -Repository $item.Repository -Name $item.Module -ErrorAction SilentlyContinue))
         {
-            Write-Host ("Module '{0}' doesnt exist" -f $require.Module)
+            Write-Host ("Module '{0}' doesnt exist" -f $item.Module)
             continue
         }
 
         #TODO: Test if version is avaliable
 
-        $key = ("{0}/{1}" -f $require.Repository, $require.Module)
+        $key = ("{0}/{1}" -f $item.Repository, $item.Module)
 
         # Add node to require-* branch. Force to overwrite existing node if specifying the same package.
-        $json.$Branch = $json.$Branch | Add-Member @{$key = $require.Version} -PassThru -Force
+        $json.$Branch = $json.$Branch | Add-Member @{$key = $item.Version} -PassThru -Force
     }
 
     $json | ConvertTo-Json | Out-File $Path

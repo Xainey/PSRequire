@@ -24,16 +24,20 @@ function Validate
         }
     }
 
-    $require = ($json."require".PSobject.Properties)
+    $r = ($json."require".PSobject.Properties)
     $requireDev = ($json."require-dev".PSobject.Properties)
-    foreach($package in $require + $requireDev ) 
+
+    Write-Verbose ( $r | Out-String )
+    Write-Verbose ( $requireDev | Out-String )
+
+    foreach($p in ($r + $requireDev) ) 
     {
-        $name =  $package.Name -match '[a-z]/[a-z]'
-        $value = $package.Value -match '[0-9.*]'
+        $name =  $p.Name -match '[a-z]/[a-z]'
+        $value = $p.Value -match '[0-9.*]'
 
         if(!($name -and $value))
         {
-            Write-Host ("'{0}' : '{1}' bad format in require.json" -f $package.Name, $package.Value)
+            Write-Host ("'{0}' : '{1}' bad format in require.json" -f $p.Name, $p.Value)
             return $false
         }
     }

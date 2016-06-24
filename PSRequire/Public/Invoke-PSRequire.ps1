@@ -13,10 +13,10 @@ function Invoke-PSRequire
         # Init      
         [Parameter(Mandatory=$True, ParameterSetName="Init")]
         [switch] $Init,
-        [String] $Name        = "Required Modules/Dependencies",
-        [String] $Description = "Imported ",
-        [String] $Version     = "1.0.0",
-        [String] $Keywords    = "{}",
+        [String] $Name,
+        [String] $Description,
+        [String] $Version,
+        [String] $Keywords,
 
         # Remove      
         [Parameter(Mandatory=$True, ParameterSetName="Remove")]
@@ -41,55 +41,29 @@ function Invoke-PSRequire
 
         # Shared
         [Parameter(Mandatory=$True, ParameterSetName="Require", Position=0)]
-        [Parameter(Mandatory=$True, ParameterSetName="RequireDev", Position=0)]
         [Parameter(Mandatory=$True, ParameterSetName="Remove", Position=0)]
         [String[]] $Package,
 
+        [Parameter(Mandatory=$False, ParameterSetName="Require", Position=2)]
         [Parameter(Mandatory=$False, ParameterSetName="Remove", Position=1)]
-        [Parameter(Mandatory=$False, ParameterSetName="Require", Position=1)]
         [Parameter(Mandatory=$False, ParameterSetName="Install", Position=1)]
         [Parameter(Mandatory=$False, ParameterSetName="Update", Position=1)]
         [switch] $Dev,
 
+        [Parameter(Mandatory=$False, ParameterSetName="Require", Position=1)]
         [Parameter(Mandatory=$False, ParameterSetName="Init", Position=1)]
         [Parameter(Mandatory=$False, ParameterSetName="Validate", Position=0)]
         [Parameter(Mandatory=$False, ParameterSetName="Get", Position=0)]
         [String] $Path = "$(Get-Location)\require.json"
     )
     
-    Write-Verbose "Triggering $($PsCmdlet.ParameterSetName) Block."
+    Write-Verbose "Triggering $($PsCmdlet.ParameterSetName)"
 
-    switch ($PsCmdlet.ParameterSetName) 
-    {
-        "Init"   {
-            Init -Name $Name -Path $Path -Description $Description -Version $Version -Keywords $Keywords
-        } 
-        "Require"   {
-            if(!$Dev) { Require -Package $Package }
-            else { Require -Package $Package -Branch "require-dev" }
-        }
-        "Remove"  {
-            if(!$Dev) { Remove -Package $Package }
-            else { Remove -Package $Package -Branch "require-dev" }
-        }
-        "Help"  {
-            Write-Host "Help Block!!"
-        }
-        "Install"  {
-            if(!$Dev) { Install -Save $Save }
-            else { Install -Branch "require-dev" }
-        }
-        "Update"  {
-            if(!$Dev) { Write-Host "Not Dev" }
-            else { Write-Host "Dev" }
-        }
-        "Get"  {
-            if(!$Path) { Get }
-            else {Get -Path $Path }
-        }
-        "Validate"  {
-            if(!$Path) { Validate }
-            else {Validate -Path $Path }
-        }
-    }
+    # Remove Switch for ParmameterSetName
+    $PSBoundParameters.Remove($PsCmdlet.ParameterSetName)
+
+    Write-Verbose "PSBoundParameters $($PSBoundParameters | Out-String)"
+
+    # Call Functon with Bound Parms
+    . $PsCmdlet.ParameterSetName @PSBoundParameters
 }

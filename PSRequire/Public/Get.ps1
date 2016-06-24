@@ -5,13 +5,13 @@ function Get
         [parameter(Mandatory = $False)]
         [string] $Path = "$(Get-Location)\require.json"
     )
-    
-    $json = Read-JsonFile -Path $Path
 
     if (!(Test-Path -Path $Path))
     {
-        return "Missing require.json. Run Invoke-PSRequire -Init."
+        Write-Host "Missing require.json. Run Invoke-PSRequire -Init."
+
+        return $null
     }
 
-    return $json
+    return (Read-JsonFile -Path $Path)
 }

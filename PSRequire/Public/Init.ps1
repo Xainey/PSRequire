@@ -3,22 +3,22 @@ function Init
     [cmdletbinding()]
     param(
         [parameter(Mandatory = $False)]
-        [string] $Name,
+        [string] $Name  = "Required Modules/Dependencies",
 
         [parameter(Mandatory = $False)]
-        [string] $Description,
+        [string] $Description = "Imported ",
 
         [parameter(Mandatory = $False)]
-        [string] $Version,
+        [string] $Version = "1.0.0",
 
         [parameter(Mandatory = $False)]
-        [string] $Keywords,                        
+        [string] $Keywords = "{}",
 
         [parameter(Mandatory = $False)]
-        [string] $Path
+        [string] $Path = "$(Get-Location)\require.json"
     )
     
-    if (Test-Path -Path $Path)
+    if ($null -ne (Get -Path $Path))
     {
         return "File require.json already exists."
     }
