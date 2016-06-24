@@ -38,6 +38,5 @@ function Validate
         }
     }
     
-    Write-Host "Validation Passed."
     return $true
 }

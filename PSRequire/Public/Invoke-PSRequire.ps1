@@ -13,7 +13,10 @@ function Invoke-PSRequire
         # Init      
         [Parameter(Mandatory=$True, ParameterSetName="Init")]
         [switch] $Init,
-        [String] $Name = "Required Modules/Dependencies",
+        [String] $Name        = "Required Modules/Dependencies",
+        [String] $Description = "Imported ",
+        [String] $Version     = "1.0.0",
+        [String] $Keywords    = "{}",
 
         # Remove      
         [Parameter(Mandatory=$True, ParameterSetName="Remove")]
@@ -21,7 +24,8 @@ function Invoke-PSRequire
 
         # Install      
         [Parameter(Mandatory=$True, ParameterSetName="Install")]
-        [switch] $Install,
+        [switch] $Install,     
+        [bool] $Save = $false,
 
         # Update      
         [Parameter(Mandatory=$True, ParameterSetName="Update")]
@@ -54,38 +58,38 @@ function Invoke-PSRequire
     )
     
     Write-Verbose "Triggering $($PsCmdlet.ParameterSetName) Block."
+
     switch ($PsCmdlet.ParameterSetName) 
     {
-        "Init"   { 
-            Init -Name $Name -Path $Path
+        "Init"   {
+            Init -Name $Name -Path $Path -Description $Description -Version $Version -Keywords $Keywords
         } 
         "Require"   {
             if(!$Dev) { Require -Package $Package }
             else { Require -Package $Package -Branch "require-dev" }
         }
-        "Remove"  {  
+        "Remove"  {
             if(!$Dev) { Remove -Package $Package }
             else { Remove -Package $Package -Branch "require-dev" }
         }
-        "Help"  { 
+        "Help"  {
             Write-Host "Help Block!!"
         }
-        "Install"  { 
-            if(!$Dev) { Install }
+        "Install"  {
+            if(!$Dev) { Install -Save $Save }
             else { Install -Branch "require-dev" }
         }
-        "Update"  { 
+        "Update"  {
             if(!$Dev) { Write-Host "Not Dev" }
             else { Write-Host "Dev" }
         }
-        "Get"  { 
+        "Get"  {
             if(!$Path) { Get }
             else {Get -Path $Path }
         }
-        "Validate"  { 
+        "Validate"  {
             if(!$Path) { Validate }
             else {Validate -Path $Path }
-        }                                            
-    } 
-
+        }
+    }
 }

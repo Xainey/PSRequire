@@ -16,7 +16,10 @@ function Sync-Module
         [string] $Force = $false,
 
         [Parameter(Mandatory=$false)]
-        [string] $Scope = 'AllUsers'
+        [string] $Scope = 'AllUsers',
+
+        [Parameter(Mandatory=$False)]
+        [bool] $Save = $false       
     )
 
     foreach ($module in $Package)
@@ -29,17 +32,28 @@ function Sync-Module
 
         if($meta.RequiredVersion)
         {
-            Write-Verbose "specific version required"           
+            Write-Verbose "Specific version required."           
         }
         elseif($meta.MaximumVersion -and $meta.MinimumVersion)
         {
-            Write-Verbose "max/min required"
+            Write-Verbose "Max/min required."
         }
         else
         {
-            Write-Verbose "Install latest"
+            Write-Verbose "Install latest."
         }
         
+        if($Save)
+        {
+            if($module.Version -eq "*")
+            {
+                $module.PSObject.Properties.Remove('Version')
+            }
+
+            Save-Module -Repository $meta.Repository -Name $meta.Name -Path "." -Force
+            return
+        }
+
         if(!(Get-InstalledModule @repository -ErrorAction SilentlyContinue))
         {
             Write-Verbose "Correct Version not Installed. Installing."

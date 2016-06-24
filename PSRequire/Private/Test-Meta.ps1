@@ -39,7 +39,7 @@ function Test-Meta
     if (!($versions -match '\*')) 
     {
         return @{
-            Repository      = $Package.Repo
+            Repository      = $Package.Repository
             Name            = $Package.Module
             RequiredVersion = New-Object Version -ArgumentList ("{0}.{1}.{2}" -f $major, $minor, $revis)
         }
@@ -49,7 +49,7 @@ function Test-Meta
     if($versions[0] -eq "*")
     {
         return @{
-            Repository      = $Package.Repo
+            Repository      = $Package.Repository
             Name            = $Package.Module
         }
     }
@@ -58,7 +58,7 @@ function Test-Meta
     if($versions[1] -eq "*")
     {
         return @{
-            Repository      = $Package.Repo
+            Repository      = $Package.Repository
             Name            = $Package.Module
             MinimumVersion  = "{0}.{1}" -f $major, $minor    
             MaximumVersion  = "{0}.{1}" -f $major, [int32]::maxvalue
@@ -69,7 +69,7 @@ function Test-Meta
     if($versions[2] -eq "*")
     {
         return @{
-            Repository      = $Package.Repo
+            Repository      = $Package.Repository
             Name            = $Package.Module
             MinimumVersion  = "{0}.{1}.{2}" -f $major, $minor, 0
             MaximumVersion  = "{0}.{1}.{2}" -f $major, $minor, [int32]::maxvalue

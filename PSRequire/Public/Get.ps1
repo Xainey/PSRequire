@@ -10,8 +10,7 @@ function Get
 
     if (!(Test-Path -Path $Path))
     {
-        Write-Host "Missing require.json. Run Invoke-PSRequire -Init."
-        return
+        return "Missing require.json. Run Invoke-PSRequire -Init."
     }
 
     return $json

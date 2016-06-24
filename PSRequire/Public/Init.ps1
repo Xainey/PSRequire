@@ -6,6 +6,15 @@ function Init
         [string] $Name,
 
         [parameter(Mandatory = $False)]
+        [string] $Description,
+
+        [parameter(Mandatory = $False)]
+        [string] $Version,
+
+        [parameter(Mandatory = $False)]
+        [string] $Keywords,                        
+
+        [parameter(Mandatory = $False)]
         [string] $Path
     )
     
@@ -16,9 +25,9 @@ function Init
 
     $json = @{ 
         "name"               =  $Name
-        "description"        =  ""
-        "version"            =  "1.0.0"
-        "keywords"           =  "{Keywords}"
+        "description"        =  $Description
+        "version"            =  $Version
+        "keywords"           =  $Keywords
         "require"            =  @{"PSGallery/Pester"="*"}
         "require-dev"        =  @{"PSGallery/PSake"="*"}
     }

@@ -12,14 +12,14 @@ function Read-JsonFile
     {
         throw("File must be a .json file.")
     }
-        
+
     try
     {
         return Get-Content -Raw -Path $Path | ConvertFrom-Json
     } 
     catch 
     {
-        Write-Error "Error converting contents to JSON"
+        return "Error converting contents to JSON."
     }
-    
+
 }

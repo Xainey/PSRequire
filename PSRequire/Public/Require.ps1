@@ -25,21 +25,21 @@ function Require
     foreach($require in $required)
     {
 
-        if(!(Get-PSRepository -Name ($require.Repo) -ErrorAction SilentlyContinue))
+        if(!(Get-PSRepository -Name ($require.Repository) -ErrorAction SilentlyContinue))
         {
-            Write-Host "Repo doesnt exist"
+            Write-Host ("Repo '{0}' doesnt exist" -f $require.Repository)
             continue
         }
 
-        if(!(Find-Module -Repository $require.Repo -Name $require.Module -ErrorAction SilentlyContinue))
+        if(!(Find-Module -Repository $require.Repository -Name $require.Module -ErrorAction SilentlyContinue))
         {
-            Write-Host "Module doesnt exist"
+            Write-Host ("Module '{0}' doesnt exist" -f $require.Module)
             continue
         }
 
         #TODO: Test if version is avaliable
 
-        $key = ("{0}/{1}" -f $require.Repo, $require.Module)
+        $key = ("{0}/{1}" -f $require.Repository, $require.Module)
 
         # Add node to require-* branch. Force to overwrite existing node if specifying the same package.
         $json.$Branch = $json.$Branch | Add-Member @{$key = $require.Version} -PassThru -Force

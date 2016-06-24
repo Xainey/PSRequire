@@ -6,11 +6,15 @@ function Install
         [string] $Path = "$(Get-Location)\require.json",
 
         [parameter(Mandatory = $False)]
-        [string] $Branch = "require"
+        [string] $Branch = "require",
+
+        [Parameter(Mandatory=$False)]
+        [bool] $Save = $false
     )
     
     if (!(Test-Path -Path $Path))
     {
+        Write-Host $Path
         Write-Host "Missing require.json. Run Invoke-PSRequire -Init."
         return
     }
@@ -19,5 +23,5 @@ function Install
 
     $packagelist = Read-PackageList -Json $json -Node $Branch
     
-    Sync-Module -Package $packagelist
+    Sync-Module -Package $packagelist -Save $Save
 }

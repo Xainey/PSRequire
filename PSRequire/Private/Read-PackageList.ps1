@@ -20,9 +20,9 @@ function Read-PackageList
             $meta = $package.Split("/")
 
             $collection += [PSCustomObject]@{
-                Repo    = $meta[0]
-                Module  = $meta[1]
-                Version = $Json.$Node.$package
+                Repository  = $meta[0]
+                Module      = $meta[1]
+                Version     = $Json.$Node.$package
             }
         }   
     }
@@ -34,9 +34,9 @@ function Read-PackageList
             $meta = $package.Split("/:")
 
             $collection += [PSCustomObject]@{
-                Repo    = $meta[0]
-                Module  = $meta[1]
-                Version = $meta[2]
+                Repository  = $meta[0]
+                Module      = $meta[1]
+                Version     = $meta[2]
             }
         }   
     }
