@@ -6,12 +6,12 @@ function Get
         [string] $Path = "$(Get-Location)\require.json"
     )
 
-    if (!(Test-Path -Path $Path))
-    {
-        Write-Host "Missing require.json. Run Invoke-PSRequire -Init."
+    [JsonHandler] $handler = [JsonHandler]::new($Path)
 
-        return $null
+    if (!$handler.Exists())
+    {
+        return "File $Path does not exist."
     }
 
-    return (Read-JsonFile -Path $Path)
+    return $handler.Read()
 }

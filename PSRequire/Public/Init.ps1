@@ -18,9 +18,11 @@ function Init
         [string] $Path = "$(Get-Location)\require.json"
     )
     
-    if ($null -ne (Get -Path $Path))
+    [JsonHandler] $handler = [JsonHandler]::new($Path)
+
+    if ($handler.Exists())
     {
-        return "File require.json already exists."
+        return "File $Path already exists"
     }
 
     $json = @{ 
@@ -30,14 +32,11 @@ function Init
         "keywords"           =  $Keywords
         "require"            =  @{"PSGallery/Pester"="*"}
         "require-dev"        =  @{"PSGallery/PSake"="*"}
+        "repository"         =  @{
+                                    "Xainey"	= @{Type = "Git"; URL = "http:\\google.com"}
+                                    "MyRepo"	= @{Type = "PSGET"; URL = "http:\\google.com"}
+                                }
     }
 
-    $folder = Split-Path -Path $Path
-    
-    if(!(Test-Path -Path $folder))
-    {
-        New-Item $folder -Type directory -Force
-    }
-
-    $json | ConvertTo-Json | Out-File $Path -Force
+    $handler.Init($json)
 }

@@ -12,47 +12,33 @@ function Require
         [switch] $Dev
     )
     
-    if (!(Test-Path -Path $Path))
-    {
-        Write-Host "Missing require.json. Run Invoke-PSRequire -Init."
-        return
-    }
+   [JsonHandler] $handler = [JsonHandler]::new($Path)
 
-    if($Dev)
+    if (!$handler.Exists())
     {
-        $Branch = "require-dev"
+        return "File $Path does not exist. Run Invoke-PSRequire -Init"
     }
-    else
-    {
-        $Branch = "require"
-    }
-
-    $json = (Read-JsonFile -Path $Path)
 
     $required = (Read-PackageList -Packages $Package)
 
     foreach($item in $required)
     {
-
-        if(!(Get-PSRepository -Name ($item.Repository) -ErrorAction SilentlyContinue))
+        [PSRepository] $repo = [PSRepository]::new($item.Repository, $item.Module)
+        
+        if(!$repo.CheckRepo())
         {
-            Write-Host ("Repo '{0}' doesnt exist" -f $item.Repository)
             continue
         }
 
-        if(!(Find-Module -Repository $item.Repository -Name $item.Module -ErrorAction SilentlyContinue))
+        if(!$repo.CheckModule())
         {
-            Write-Host ("Module '{0}' doesnt exist" -f $item.Module)
             continue
-        }
+        }        
 
         #TODO: Test if version is avaliable
 
         $key = ("{0}/{1}" -f $item.Repository, $item.Module)
-
-        # Add node to require-* branch. Force to overwrite existing node if specifying the same package.
-        $json.$Branch = $json.$Branch | Add-Member @{$key = $item.Version} -PassThru -Force
+        $member = @{$key = $item.Version}
+        $handler.Require($member, $Dev)
     }
-
-    $json | ConvertTo-Json | Out-File $Path
 }

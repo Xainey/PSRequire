@@ -1,3 +1,5 @@
+# Test class for refactoring Install.ps1
+
 function InstallModule
 {
     [cmdletbinding()]
@@ -12,26 +14,23 @@ function InstallModule
         [bool] $Save = $false
     )
     
-    if (!(Test-Path -Path $Path))
+    [JsonHandler] $handler = [JsonHandler]::new($Path)
+
+    if (!$handler.Exists())
     {
-        Write-Host $Path
-        Write-Host "Missing require.json. Run Invoke-PSRequire -Init."
-        return
+        return "File $Path does not exist"
     }
 
-    $json = Read-JsonFile -Path $Path
+    $packageList = Read-PackageList -Json $handler.Read() -Node $Branch
 
-    $packagelist = Read-PackageList -Json $json -Node $Branch
-    
-    
-    foreach ($module in $packagelist)
+    foreach ($module in $packageList)
     {
-        Write-Verbose "Testing module: '$module'..."
-
         [PSRepository] $repo = [PSRepository]::new($module.Repository, $module.Module)
         $repo.CheckRepo()
         $repo.CheckModule()
 
+        $meta = (test-meta -package $module)
+        Write-Host ( $meta | Out-String )
     }
 
 }

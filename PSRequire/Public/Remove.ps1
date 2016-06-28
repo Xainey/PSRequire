@@ -10,30 +10,18 @@ function Remove
 
         [parameter(Mandatory = $False)]
         [switch] $Dev
-
     )
-        
-    $json = Read-JsonFile -Path $Path
+    
+    [JsonHandler] $handler = [JsonHandler]::new($Path)
 
-    if (!(Test-Path -Path $Path))
+    if (!$handler.Exists())
     {
-        Write-Host "Missing require.json. Run Invoke-PSRequire -Init."
-        return
+        return "File $Path does not exist. Run Invoke-PSRequire -Init"
     }
-
-    if($Dev)
-    {
-        $Branch = "require-dev"
-    }
-    else
-    {
-        $Branch = "require"
-    }
-
+    
     foreach($module in $Package)
     {
-        $json.$Branch.PSObject.Properties.Remove($module)
+        $handler.Remove($module, $Dev)
     }
 
-    $json | ConvertTo-Json | Out-File $Path
 }

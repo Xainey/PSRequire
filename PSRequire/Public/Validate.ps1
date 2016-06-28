@@ -6,13 +6,14 @@ function Validate
         [string] $Path = "$(Get-Location)\require.json"
     )
     
-    $json = Read-JsonFile -Path $Path
+    [JsonHandler] $handler = [JsonHandler]::new($Path)
 
-    if (!(Test-Path -Path $Path))
+    if (!$handler.Exists())
     {
-        Write-Host "Missing require.json. Run Invoke-PSRequire -Init."
-        return $false
+        return "File $Path does not exist"
     }
+
+    $json = $handler.Read()
 
     $properties = ("version", "name", "description", "require", "require-dev", "keywords")
     foreach($prop in $properties)

@@ -12,14 +12,14 @@ function Install
         [bool] $Save = $false
     )
     
-    if (!(Test-Path -Path $Path))
+    [JsonHandler] $handler = [JsonHandler]::new($Path)
+
+    if (!$handler.Exists())
     {
-        Write-Host $Path
-        Write-Host "Missing require.json. Run Invoke-PSRequire -Init."
-        return
+        return "File $Path does not exist"
     }
 
-    $json = Read-JsonFile -Path $Path
+    $json = $handler.Read()
 
     $packagelist = Read-PackageList -Json $json -Node $Branch
     
