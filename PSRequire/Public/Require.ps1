@@ -12,14 +12,14 @@ function Require
         [switch] $Dev
     )
     
-   [JsonHandler] $handler = [JsonHandler]::new($Path)
+    [JsonHandler] $handler = [JsonHandler]::new($Path)
 
     if (!$handler.Exists())
     {
         return "File $Path does not exist. Run Invoke-PSRequire -Init"
     }
 
-    $required = (Read-PackageList -Packages $Package)
+    [PSCustomObject] $required = [PSPackage]::GetPackageList($Package)
 
     foreach($item in $required)
     {

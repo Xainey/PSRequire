@@ -21,7 +21,7 @@ function Install
 
     $json = $handler.Read()
 
-    $packagelist = Read-PackageList -Json $json -Node $Branch
+    [PSCustomObject] $packageList = [PSPackage]::GetPackageList($handler.Read(), $Branch)
     
     Sync-Module -Package $packagelist -Save $Save
 }

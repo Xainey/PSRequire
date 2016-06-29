@@ -21,7 +21,7 @@ function InstallModule
         return "File $Path does not exist"
     }
 
-    $packageList = Read-PackageList -Json $handler.Read() -Node $Branch
+    [PSCustomObject] $packageList = [PSPackage]::GetPackageList($handler.Read(), $Branch)
 
     foreach ($module in $packageList)
     {
