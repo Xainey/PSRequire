@@ -1,4 +1,6 @@
-class GitRepository : Repository
+using namespace Repository
+
+class Repository_Git : Repository
 {
     [String] $Name
     [String] $SourceLocation
@@ -6,7 +8,7 @@ class GitRepository : Repository
     <#
      # Constructor
      #>    
-    GitRepository([String]$Name, [String] $SourceLocation)
+    Repository_Git([String]$Name, [String] $SourceLocation)
     {
         try
         {

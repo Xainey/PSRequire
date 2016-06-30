@@ -33,8 +33,8 @@ function Init
         "require"            =  @{"PSGallery/Pester"="*"}
         "require-dev"        =  @{"PSGallery/PSake"="*"}
         "repository"         =  @{
-                                    "Xainey"	= @{Type = "Git"; URL = "http:\\google.com"}
-                                    "MyRepo"	= @{Type = "PSGET"; URL = "http:\\google.com"}
+                                    "PSGallery"	= @{Type = "NuGeT"; SourceLocation = "https://www.powershellgallery.com/api/v2/"}
+                                    "Xainey/PSRequire"	= @{Type = "Git"; SourceLocation = "https://github.com/Xainey/PSRequire.git"}
                                 }
     }
 

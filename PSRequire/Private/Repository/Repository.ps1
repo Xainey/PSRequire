@@ -1,5 +1,8 @@
 class Repository
 {
+    [String] $Name
+    [String] $SourceLocation
+
     Repository()
     {
         $type = $this.GetType()

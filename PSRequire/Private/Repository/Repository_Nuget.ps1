@@ -1,4 +1,4 @@
-class NugetRepository : Repository
+class Repository_Nuget : Repository
 {
     [String] $Name
     [String] $PackageManagementProvider
@@ -8,11 +8,11 @@ class NugetRepository : Repository
     <#
      # Constructor
      #>    
-    NugetRepository([String]$Name, [String] $InstallationPolicy, [String] $SourceLocation)
+    Repository_Nuget([String]$Name, [String] $SourceLocation)
     {
         $this.Name = $Name
         $this.PackageManagementProvider = "NuGet"
-        $this.InstallationPolicy = $InstallationPolicy
+        $this.InstallationPolicy = "Trusted"
         $this.SourceLocation = $SourceLocation
     }
 

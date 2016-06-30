@@ -21,6 +21,7 @@ function InstallModule
         return "File $Path does not exist"
     }
 
+<#
     [PSCustomObject] $packageList = [PSPackage]::GetPackageList($handler.Read(), $Branch)
 
     foreach ($module in $packageList)
@@ -31,6 +32,23 @@ function InstallModule
 
         $meta = (test-meta -package $module)
         Write-Host ( $meta | Out-String )
+    }
+#>
+
+    $json = $handler.Read()
+
+    foreach ($repo in ($json.repository | Get-Member * -MemberType NoteProperty).Name) 
+    {
+        $name = $repo
+        $type = $json.repository.$repo.Type
+        $source = $json.repository.$repo.SourceLocation
+
+        [RepositoryFactory]::addRepo($name, $source, $type)
+    }
+
+    foreach($repo in [RepositoryFactory]::Repositories)
+    {
+        $repo.GetType()
     }
 
 }

@@ -1,9 +1,11 @@
 # Get public and private function definition files.
 # $ModulePath = $PSScriptRoot
 
-$Public  = @( Get-ChildItem -Path $PSScriptRoot\Public\*.ps1 -ErrorAction SilentlyContinue )
-$Private = @( Get-ChildItem -Path $PSScriptRoot\Private\*.ps1 -ErrorAction SilentlyContinue )
+#$Repository = @( Get-ChildItem -Path $PSScriptRoot\Private\Package\*.ps1 -ErrorAction SilentlyContinue )
+#$Repository | Get-Content | Out-File $PSScriptRoot\Private\Package.ps1
 
+$Public  = @( Get-ChildItem -Path $PSScriptRoot\Public\*.ps1 -ErrorAction SilentlyContinue )
+$Private = @( Get-ChildItem -Path $PSScriptRoot\Private\*.ps1 -Recurse -ErrorAction SilentlyContinue )
 
 # Dot source the files
 foreach($import in @($Public + $Private))
