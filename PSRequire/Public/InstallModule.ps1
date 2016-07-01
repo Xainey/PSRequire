@@ -21,34 +21,51 @@ function InstallModule
         return "File $Path does not exist"
     }
 
-<#
-    [PSCustomObject] $packageList = [PSPackage]::GetPackageList($handler.Read(), $Branch)
-
-    foreach ($module in $packageList)
-    {
-        [PSRepository] $repo = [PSRepository]::new($module.Repository, $module.Module)
-        $repo.CheckRepo()
-        $repo.CheckModule()
-
-        $meta = (test-meta -package $module)
-        Write-Host ( $meta | Out-String )
-    }
-#>
-
     $json = $handler.Read()
 
-    foreach ($repo in ($json.repository | Get-Member * -MemberType NoteProperty).Name) 
-    {
-        $name = $repo
-        $type = $json.repository.$repo.Type
-        $source = $json.repository.$repo.SourceLocation
+    $repoFactory =  [RepositoryFactory]::new()
 
-        [RepositoryFactory]::addRepo($name, $source, $type)
+    # Add Repos to Factory From Json
+    foreach ($repo in $json.repository.PSObject.Properties) 
+    {
+        $name = $repo.Name
+        $type = $repo.Value.Type
+        $source = $repo.Value.SourceLocation
+
+        $VerbosePreference = "Continue"
+        $repoFactory.addRepo($name, $source, $type)
+        $VerbosePreference = "SilentlyContinue"
     }
 
-    foreach($repo in [RepositoryFactory]::Repositories)
+    #Add Existing Repos
+    $existingRepo = (Get-PSRepository)
+    foreach($repo in $existingRepo)
     {
-        $repo.GetType()
+        $name = $repo.Name
+        $type = $repo.PackageManagementProvider
+        $source = $repo.SourceLocation
+
+        $VerbosePreference = "Continue"
+        $repoFactory.addRepo($name, $source, $type)
+        $VerbosePreference = "SilentlyContinue"
     }
+
+    "`nTesting Repo Methods"
+    foreach($repo in $repoFactory.Repositories)
+    {
+        "Name: {0} Exists: {1}" -f $repo.Name, $repo.Exists()
+    }
+
+    "`nRequired List"
+    foreach ($required in $json.require.PSObject.Properties) 
+    {
+        "Name: {0} Value: {1}" -f $required.Name, $required.Value
+    }
+
+    "`nTesting Reference"
+    #$repoFactory.Repositories.Where({$_ -is [Repository_Git]})
+    #$repoFactory.Repositories.Where({$_.Name -eq "PSGallery"})
+    #$repoFactory.getByName("PSGallery")
+    $repoFactory.getByType([Repository_Nuget]).Name
 
 }

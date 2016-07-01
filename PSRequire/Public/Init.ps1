@@ -25,7 +25,7 @@ function Init
         return "File $Path already exists"
     }
 
-    $json = @{ 
+    [Hashtable] $json = @{ 
         "name"               =  $Name
         "description"        =  $Description
         "version"            =  $Version
@@ -34,7 +34,7 @@ function Init
         "require-dev"        =  @{"PSGallery/PSake"="*"}
         "repository"         =  @{
                                     "PSGallery"	= @{Type = "NuGeT"; SourceLocation = "https://www.powershellgallery.com/api/v2/"}
-                                    "Xainey/PSRequire"	= @{Type = "Git"; SourceLocation = "https://github.com/Xainey/PSRequire.git"}
+                                    "Github"	= @{Type = "Git"; SourceLocation = "https://github.com/Xainey/PSRequire.git"}
                                 }
     }
 

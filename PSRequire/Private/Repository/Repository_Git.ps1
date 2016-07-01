@@ -7,7 +7,7 @@ class Repository_Git : Repository
     
     <#
      # Constructor
-     #>    
+     #>
     Repository_Git([String]$Name, [String] $SourceLocation)
     {
         try
@@ -24,13 +24,13 @@ class Repository_Git : Repository
     }
 
     <#
-     # Check if a PSGet Repository Exists
+     # Check if a Git Repository Exists
      #>
     [bool] Exists()
     {
         try
         {
-           & git $this.SourceLocation | Out-Null
+           & git ls-remote $this.SourceLocation | Out-Null
         }
         catch 
         {
@@ -40,21 +40,33 @@ class Repository_Git : Repository
         return $true
     }
 
+    <#
+     #
+     #>
     [void] Register ()
     {
 
     }
 
+    <#
+     #
+     #>
     [void] Set ()
     {
         
     }
 
+    <#
+     # Constructor
+     #>
     [void] Unregister ()
     {
         
     }
 
+    <#
+     # Constructor
+     #>
     [PSCustomObject] Get ()
     {
         $parms = $this.Splat(("Name", "SourceLocation"))

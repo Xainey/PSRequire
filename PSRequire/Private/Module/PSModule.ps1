@@ -1,37 +1,40 @@
-class Repository
+class PSModule
 {
     [String] $Name
-    [String] $SourceLocation
+    [Version] $Version
 
-    <#
-     # Constructor
-     #>    
-    Repository()
+    PSModule()
     {
         $type = $this.GetType()
 
-        if ($type -eq [Repository])
+        if ($type -eq [PSModule])
         {
             throw("Class $type must be inherited")
         }
     }
+
 
     [bool] Exists()
     {
         throw("Must Override Method")
     }
 
-    [void] Register ()
+    [bool] VersionExists()
     {
         throw("Must Override Method")
     }
 
-    [void] Set ()
+    [void] Install ()
     {
         throw("Must Override Method")
     }
 
-    [void] Unregister ()
+    [void] Uninstall ()
+    {
+        throw("Must Override Method")
+    }
+
+    [void] Update ()
     {
         throw("Must Override Method")
     }
@@ -41,9 +44,7 @@ class Repository
         throw("Must Override Method")
     }
 
-    <#
-     # Helper for Splatting PS Functions
-     #>
+
     [HashTable] Splat([String[]] $Properties)
     {
         $splat = @{}

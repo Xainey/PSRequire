@@ -1,9 +1,11 @@
-This Project is a WIP
+# PSRequire
 
-# CLI Reference
+* This Project is a WIP
 
-```
-# Init 
+## CLI Reference
+
+```powershell
+# Init
 Invoke-PSRequire -Init
 Invoke-PSRequire -Init -Name "build requirements"
 Invoke-PSRequire -Init -Name "build requirements" -Path "c:\temp\path_to_folder\require.json"

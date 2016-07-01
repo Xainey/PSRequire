@@ -30,6 +30,9 @@ class Repository_Nuget : Repository
         return $true
     }
 
+    <#
+     # Register a PS Repository
+     #>    
     [void] Register ()
     {
         if(!$this.Exists())
@@ -39,6 +42,9 @@ class Repository_Nuget : Repository
         }
     }
 
+    <#
+     # Alter a PS Repository
+     #>    
     [void] Set ()
     {
         if($this.Exists())
@@ -48,6 +54,9 @@ class Repository_Nuget : Repository
         }
     }
 
+    <#
+     # Unregister a PS Repository
+     #>    
     [void] Unregister ()
     {
         if($this.Exists())
@@ -56,6 +65,9 @@ class Repository_Nuget : Repository
         }
     }
 
+    <#
+     # Get a PS Repository
+     #>    
     [PSCustomObject] Get ()
     {
         return Get-PSRepository -Name $this.Name
