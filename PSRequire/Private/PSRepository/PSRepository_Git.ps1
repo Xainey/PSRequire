@@ -1,6 +1,4 @@
-using namespace Repository
-
-class Repository_Git : Repository
+class PSRepository_Git : PSRepository
 {
     [String] $Name
     [String] $SourceLocation
@@ -8,7 +6,7 @@ class Repository_Git : Repository
     <#
      # Constructor
      #>
-    Repository_Git([String]$Name, [String] $SourceLocation)
+    PSRepository_Git([String]$Name, [String] $SourceLocation)
     {
         try
         {

@@ -1,7 +1,8 @@
-class Repository
+class PSRepository
 {
     [String] $Name
     [String] $SourceLocation
+    [PSModuleFactory] $ModuleFactory
 
     <#
      # Constructor
@@ -10,7 +11,7 @@ class Repository
     {
         $type = $this.GetType()
 
-        if ($type -eq [Repository])
+        if ($type -eq [PSRepository])
         {
             throw("Class $type must be inherited")
         }

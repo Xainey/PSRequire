@@ -1,7 +1,7 @@
 class PSModule_Nuget : PSModule 
 {
 
-    PSModule_Nuget([String] $Name, [Version] $Version)
+    PSModule_Nuget([String] $Name, [String] $Version)
     {
         $this.Name = $Name
         $this.Version = $Version

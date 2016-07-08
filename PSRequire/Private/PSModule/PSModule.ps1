@@ -1,7 +1,7 @@
 class PSModule
 {
     [String] $Name
-    [Version] $Version
+    [String] $Version
 
     PSModule()
     {

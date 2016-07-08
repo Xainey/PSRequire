@@ -1,4 +1,4 @@
-class Repository_Nuget : Repository
+class PSRepository_Nuget : PSRepository
 {
     [String] $Name
     [String] $PackageManagementProvider
@@ -8,12 +8,13 @@ class Repository_Nuget : Repository
     <#
      # Constructor
      #>    
-    Repository_Nuget([String]$Name, [String] $SourceLocation)
+    PSRepository_Nuget([String]$Name, [String] $SourceLocation)
     {
         $this.Name = $Name
         $this.PackageManagementProvider = "NuGet"
         $this.InstallationPolicy = "Trusted"
         $this.SourceLocation = $SourceLocation
+        $this.ModuleFactory = [PSModuleFactory]::new() 
     }
 
     <#
